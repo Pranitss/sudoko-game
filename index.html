@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .sudoku-board {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 2px;
+        }
+
+        .sudoku-cell {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            text-align: center;
+            line-height: 40px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            background-color: #fff;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .sudoku-cell:hover {
+            background-color: #f0f0f0;
+        }
+
+        .sudoku-cell:nth-child(3n),
+        .sudoku-cell:nth-child(3n-1) {
+            border-right: 2px solid #000;
+        }
+
+        .sudoku-cell:nth-child(9n),
+        .sudoku-cell:nth-child(9n-1) {
+            border-right: 2px solid #000;
+        }
+
+        .sudoku-cell:nth-child(n+7) {
+            border-bottom: 2px solid #000;
+        }
+
+        .sudoku-cell:nth-child(n+19) {
+            border-bottom: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="sudoku-board" id="sudoku-board"></div>
+
+    <script>
+        const boardElement = document.getElementById('sudoku-board');
+        const board = [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ];
+
+        function initializeBoard() {
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('sudoku-cell');
+                    cell.textContent = board[i][j] !== 0 ? board[i][j] : '';
+                    cell.addEventListener('click', () => handleCellClick(i, j));
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        function handleCellClick(row, col) {
+            const inputValue = prompt('Enter a number (1-9):');
+            const parsedInput = parseInt(inputValue);
+
+            if (!isNaN(parsedInput) && parsedInput >= 1 && parsedInput <= 9) {
+                board[row][col] = parsedInput;
+                updateBoard();
+            } else {
+                alert('Invalid input. Please enter a number between 1 and 9.');
+            }
+        }
+
+        function updateBoard() {
+            const cells = document.querySelectorAll('.sudoku-cell');
+            
+            cells.forEach((cell, index) => {
+                const row = Math.floor(index / 9);
+                const col = index % 9;
+                cell.textContent = board[row][col] !== 0 ? board[row][col] : '';
+            });
+        }
+
+        initializeBoard();
+    </script>
+</body>
+</html>
